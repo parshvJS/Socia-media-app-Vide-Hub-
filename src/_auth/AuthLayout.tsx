@@ -25,7 +25,7 @@ const AuthLayout = () => {
   //code 
 
 
-  const isAuth = false
+  const isAuth = true
 
   return (
     <>
@@ -36,8 +36,7 @@ const AuthLayout = () => {
           <section className='flex   flex-1 justify-center items-center flex-col py-10 '>
             <Outlet />
           </section>
-
-          <img src="src\assests\side-img.svg" alt="" className='hidden xl:block h-screen w-1/2 object-cover bg-no-repeat' />
+          <img src="src\assests\side-img.svg" alt="" className='hidden xl:block h-screen w-1/2 object-cover bg-no-repeat bg-auto' />
         </>
       )}
     </>
