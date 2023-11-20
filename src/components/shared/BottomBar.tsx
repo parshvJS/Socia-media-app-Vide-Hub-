@@ -13,7 +13,7 @@ const BottomBar = () => {
       {bottombarLinks.map((link) => {
         const isActive = pathname === link.route;
         return (
-          <Link key={link.label} className={` flex flex-col gap-2 justify-center p-2 items-center  ${isActive && ' bg-primary-500 p-2 rounded-[10px]'}`} to={link.route} >
+          <Link key={link.label} className={` flex flex-col gap-2 justify-center py-2 px-4 items-center  ${isActive && ' bg-primary-500 p-2 rounded-[10px]'}`} to={link.route} >
             <img src={link.imgURL} alt="Icon" className={`${isActive && 'invert-white'}`}
               width={20}
             />

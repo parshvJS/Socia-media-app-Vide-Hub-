@@ -41,9 +41,7 @@ function SigninForm() {
       email: values.email,
       password: values.password,
     })
-
-    if (!session) return toast({ title:session })
-
+    if (!session) return toast({title:'Login Failed !',description:'Something went wrong !'})
 
     const isLoggedIn = await checkAuthUser()
     if (isLoggedIn) {
