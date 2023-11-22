@@ -9,7 +9,7 @@ const BottomBar = () => {
 
 
   return (
-    <section className='bottom-bar '>
+    <section className='bottom-bar'>
       {bottombarLinks.map((link) => {
         const isActive = pathname === link.route;
         return (

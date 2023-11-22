@@ -1,6 +1,8 @@
-import { INewUser } from "@/types";
-import { account, appwriteConfig, avatars, databases } from "./config";
+import { INewPost, INewUser } from "@/types";
+import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from "appwrite";
+
+export const result = avatars.getInitials();
 
 export async function createNewUser(user: INewUser) {
     try {
@@ -66,11 +68,11 @@ export async function getCurrentUser() {
             appwriteConfig.databaseId,
             appwriteConfig.user_bucketId,
             [Query.equal('accountId', userDetails.$id)]
-            )
-         if(!currentUser) throw Error
-            
-            
-            //returns all data of user 
+        )
+        if (!currentUser) throw Error
+
+
+        //returns all data of user 
         return currentUser.documents[0];
 
     } catch (error) {
@@ -89,3 +91,94 @@ export async function signOutAccount() {
         console.log(error)
     }
 }
+
+
+
+
+// Posts Services
+
+
+
+export async function uploadFile(file: File) {
+    try {
+        const fileUpload = storage.createFile(
+            appwriteConfig.storageId,
+            ID.unique(),
+            file
+        )
+        return fileUpload
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+// get file preview with appwrite
+
+export function getFilePreview(fileId: string) {
+    try {
+        const filePreview = storage.getFilePreview(
+            appwriteConfig.storageId,
+            fileId,
+            2000,
+            2000,
+            'top',
+            100
+        )
+        if (!filePreview) throw Error;
+        return filePreview
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function createNewPost(post: INewPost) {
+    try {
+
+        // upload file to appwrite storage
+        const uploadImage = await uploadFile(post.file[0])
+        if (!uploadImage) throw Error;
+
+        //get file url from getfilePrevier
+        const imageUrlByPreview = getFilePreview(uploadImage.$id)
+        if (!imageUrlByPreview) {
+            await storage.deleteFile(appwriteConfig.storageId, uploadImage.$id)
+        }
+        if (!getFilePreview) throw Error;
+        const tags = post.tags?.replace(/ /g, "").split(",") || [];
+        const newPost = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.post_bucketId,
+            ID.unique(),
+            {
+                creator: post.userId,
+                caption: post.caption,
+                imageUrl: imageUrlByPreview,
+                imageId: uploadImage.$id,
+                location: post.location,
+                tags: tags,
+            })
+
+            if (!newPost) {
+                await storage.deleteFile(appwriteConfig.storageId,uploadImage.$id);
+                throw Error;
+              }
+          
+
+    }
+    catch (error) {
+        console.log(error);
+
+    }
+}
+
+export async function getRecentPost(){
+    const posts=await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.post_bucketId,
+        [Query.orderDesc('$createdAt'),Query.limit(30)]
+    )
+    if(!posts) throw Error;
+    return posts
+}
+
