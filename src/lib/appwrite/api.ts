@@ -1,6 +1,7 @@
 import { INewPost, INewUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from "appwrite";
+import { useUserContext } from "@/context/authContext";
 
 export const result = avatars.getInitials();
 
@@ -25,6 +26,8 @@ export async function createNewUser(user: INewUser) {
         return error
     }
 }
+
+
 
 export async function saveUserToDb(user: {
     accountId: string,
@@ -57,7 +60,14 @@ export async function signInAccount(user: { email: string, password: string }) {
     }
 }
 
-
+export async function checkForCurrentUser() {
+try {
+        const userDetails = await account.get() 
+        return userDetails
+} catch (error) {
+    console.log(error)
+}
+}
 
 export async function getCurrentUser() {
     try {
@@ -84,14 +94,15 @@ export async function getCurrentUser() {
 // appwrite function to sign out the existing user
 
 export async function signOutAccount() {
-    try {
-        const session = await account.deleteSession('current')
-        return session;
-    } catch (error) {
-        console.log(error)
-    }
-}
+  try {
+    const session = await account.deleteSession('current');
+    return session;
+  } catch (error) {
+    // Log the error details
+    console.error('Error signing out:', error);
 
+}
+}
 
 
 

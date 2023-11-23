@@ -1,3 +1,6 @@
+import { useUserContext } from '@/context/authContext';
+import { checkForCurrentUser } from '@/lib/appwrite/api';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom'
 import { Navigate } from 'react-router-dom';
 
@@ -24,12 +27,10 @@ const AuthLayout = () => {
 
   //code 
 
-
-  const isAuth = true
-
+const {isAuthanticated}=useUserContext()
   return (
     <>
-      {!isAuth ? (
+      {isAuthanticated ? (
         <Navigate to="/" />
       ) : (
         <>

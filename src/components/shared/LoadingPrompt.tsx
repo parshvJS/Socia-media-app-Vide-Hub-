@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
 const LoadingPrompt = () => {
-    const [loadingPrompt, setLoadingPrompt] = useState('Loading ...');
-    //more that 300 funny loading prompts
+        //more that 300 funny loading prompts
+        const getRandomPrompt = () => {
+            const randomIndex = Math.floor(Math.random() * funnyLoadingPrompts.length);
+            return funnyLoadingPrompts[randomIndex];
+        };
     const funnyLoadingPrompts = [
         'Tickling the server...',
         'Summoning unicorns...',
@@ -131,11 +134,9 @@ const LoadingPrompt = () => {
         "Merry Mingle Starting",
         "Whimsy Waltz Waltzing",
     ];
+    const [loadingPrompt, setLoadingPrompt] = useState(getRandomPrompt);
 
-    const getRandomPrompt = () => {
-        const randomIndex = Math.floor(Math.random() * funnyLoadingPrompts.length);
-        return funnyLoadingPrompts[randomIndex];
-    };
+
     useEffect(() => {
         const intervalId = setInterval(() => {
             setLoadingPrompt(getRandomPrompt);

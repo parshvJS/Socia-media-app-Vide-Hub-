@@ -1,26 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
 import { useSignOutAccount } from '@/lib/React-Query/querysAndMutation'
-import { useUserContext } from '@/context/authContext'
-import { sidebarLinks, bottombarLinks } from '../../constants/index'
+import { useUserContext,INITIAL_USER } from '@/context/authContext'
+import { sidebarLinks } from '../../constants/index'
 import { INavLink } from '@/types'
+
+
 const LeftSideBar = () => {
   const { mutate: signOut, isSuccess } = useSignOutAccount()
   const navigate = useNavigate()
-  const user = useUserContext()
-  const [SomeClass, setSomeClass] = useState('')
   const { pathname } = useLocation()
+  const {user}=useUserContext()
+  const { setIsAuthanticated,setUser}=useUserContext()
   useEffect(() => {
     if (isSuccess) {
+      console.log('loging out !')
       navigate('/login')
     }
-
   }, [isSuccess])
+  const handleSignOut = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    signOut();
+    setIsAuthanticated(false);
+    setUser(INITIAL_USER);
+    navigate("/login");
+  };
 
   return (
     <>
-      <nav className={`leftsidebar here bg-slate-900 ${SomeClass}`}>
+      <nav className={`leftsidebar here bg-slate-900 `}>
         <div className="flex flex-col gap-11">
           {/* logo */}
           <Link to='/' className='mx-6 mt-5 '>
@@ -33,17 +44,17 @@ const LeftSideBar = () => {
           </Link>
 
           {/* user profile */}
-          <Link to={`/profile/${user.user.id}`} className="flex gap-3 mx-5 my-0 items-center">
+          <Link to={`/profile/${user.id}`} className="flex gap-3 mx-5 my-0 items-center">
             <img
-              src={user.user.imageUrl}
+              src={user.imageUrl}
               className='h-11 w-11 rounded-full'
               width={25}
               height={20}
               alt="Profile image"
             />
             <div className="flex-row">
-              <p className='body-bold'>{user.user.name}</p>
-              <p className='small-regular text-light-3'>@{user.user.username}</p>
+              <p className='body-bold'>{user.name}</p>
+              <p className='small-regular text-light-3'>@{user.username}</p>
             </div>
           </Link>
 
@@ -66,7 +77,7 @@ const LeftSideBar = () => {
           {/* Log out button */}
           <Button variant='ghost'
             className='shad-button-ghost mt-12 mr-[3.5rem]'
-            onClick={() => signOut()}>
+            onClick={ handleSignOut}>
             <img src="src\assests\Logout.svg" width={25} height={20} alt="" />
             <p className='body-bold'>Logout</p>
           </Button>
