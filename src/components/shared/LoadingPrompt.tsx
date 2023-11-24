@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 
 const LoadingPrompt = () => {
         //more that 300 funny loading prompts
@@ -147,10 +147,9 @@ const LoadingPrompt = () => {
 
 
     return (
-        <div>
-            <p className='text-light-3 text-center ml-[-8px] mt-2'>{loadingPrompt}</p>
-        </div>
+        <p className='text-light-3 text-center ml-[-8px] mt-2'>{loadingPrompt}</p>
     )
+    
 }
 
 export default LoadingPrompt

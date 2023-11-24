@@ -12,7 +12,6 @@ const TopBar = () => {
         if (isSuccess) {
             navigate('/login')
         }
-
     }, [isSuccess])
     return (
         <section className='topbar'>
@@ -28,7 +27,7 @@ const TopBar = () => {
                 <div className="flex gap-4 justify-center items-center pr-2">
                     <Button variant='ghost'
                         className='shad-button-ghost'
-                        onClick={() => signOut()}>
+                        onClick={ signOut}>
                         <img src="src\assests\Logout.svg" width={20} height={20} alt="" />
                     </Button>
                     <Link to={`/profile/${user.user.id}`}>

@@ -9,12 +9,12 @@ import { HashLoader } from "react-spinners"
 function Home() {
   const { data: posts, isPending: isPostsLoading, isError: isPostError } = useGetRecentPosts()
   const [loading, setLoading] = useState(true)
-  useEffect(()=>{
-    if(!isPostsLoading){
-      console.log(posts)
+  // useEffect(()=>{
+  //   if(!isPostsLoading){
+  //     console.log(posts)
 
-    }
-  },[])
+  //   }
+  // },[])
   return (
 
     <div className="home-container flex">
@@ -26,7 +26,7 @@ function Home() {
                 <HashLoader
                   color={"#fff"}
                 />
-              <p className="mt-5"><LoadingPrompt /></p>
+              <div className="mt-5"><LoadingPrompt /></div>
               </div>
             </>
 

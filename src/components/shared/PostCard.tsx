@@ -4,14 +4,15 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@radix
 import { Models } from 'appwrite'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import PostStats from './PostStats'
 type PostCardPropr = {
   post: Models.Document,
 }
 const PostCard = (post: PostCardPropr) => {
   const { user } = useUserContext()
-  useEffect(() => {
-    console.log('secongd', post.post, post.post.creator)
-  }, [])
+  // useEffect(() => {
+  //   console.log('secongd', post.post, post.post.creator)
+  // }, [])
 
   return (
     <div className="post-card w-fit">
@@ -66,6 +67,7 @@ const PostCard = (post: PostCardPropr) => {
         <img src={post?.post?.imageUrl} alt="Post Image" className='post-card_image rounded-xl' />
 
       </Link>
+      <PostStats post={post} userId={user.id}/>
     </div>
   )
 }

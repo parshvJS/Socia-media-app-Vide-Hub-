@@ -193,3 +193,99 @@ export async function getRecentPost(){
     return posts
 }
 
+
+
+// like post 
+// export async function likePost(postId:string,likesArray:string[]){
+//     try {
+//            const updatedPost=await databases.updateDocument(
+//             appwriteConfig.databaseId,
+//             appwriteConfig.post_bucketId,
+//             postId,
+//             {likes:likesArray},
+//         )
+//         if(!updatedPost) throw Error;
+//         return updatedPost
+
+//     } catch (error) {
+//     console.log(error);
+    
+//     }
+// }
+//list all liked post
+
+
+
+export async function likePost(postId: string, likesArray: string[]) {
+    try {
+        // Update the document in the database
+        console.log('-----------------appwrite-----------------------')
+        console.log('like array got : ', likesArray)
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.post_bucketId,
+            postId,
+            { likes: likesArray }
+            );
+
+        if (!updatedPost) {
+            throw new Error('Failed to update post');
+        }
+        console.log('like  updated: ', updatedPost)
+
+        return updatedPost;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+export async function SavePost(postId:string,userId:string){
+    try {
+        const savePost=await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.save_bucketId,
+            ID.unique(),
+            {
+                user:userId,
+                post:postId
+            }
+        )
+        if(!savePost) throw Error;
+        return savePost
+
+    } catch (error) {
+    console.log(error);
+    
+    }
+}
+
+export async function deleteSavePost(saveRecordId:string){
+    try {
+        const deleteSavedPost=await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.save_bucketId,
+            saveRecordId
+        )
+        
+        if(!deleteSavedPost) throw Error;
+        return {status:'ok'}
+
+    } catch (error) {
+    console.log(error);
+    
+    }
+}
+
+export async function allLikes(postId:string){
+    try {
+        const likes=await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.post_bucketId,
+            [Query.equal('imageId',postId)]
+        )
+            return likes.documents[0].likes.length;
+    } catch (error) {
+        console.log(error);
+    }
+}
